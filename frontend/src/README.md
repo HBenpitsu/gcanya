@@ -11,7 +11,7 @@ ViewはViewModelを監視し、表示する内容を決定する。
 View上での操作はまずViewModelに捕捉され、各種必要な部分に伝達される。
 具体的には、Viewに登録するイベントリスナは必ずViewModelに定義されたものであるということ。
 
-## Scheduler
+## AutoLoader
 プログラムの自動実行を担当する。実際に実行される関数はここにはかかれず、アプリケーションロジックレイヤから呼び出される。
 
 ## アプリケーションロジック
@@ -26,7 +26,7 @@ View上での操作はまずViewModelに捕捉され、各種必要な部分に�
 
 ## content,options,popup
 これらはそれぞれに
-`View`,`ViewModel`,`Scheduler`,`index`を持つ。
+`View`,`ViewModel`,`AutoLoader`,`index`を持つ。
 
 `index`以外の責務は[機能の分類](#機能の分類)の項で述べられている。
 
@@ -36,9 +36,9 @@ View上での操作はまずViewModelに捕捉され、各種必要な部分に�
 この対応は`manifest.ts`上に記述すること。
 
 ## background
-`Scheduler`,`index`を持つ。
+`AutoLoader`,`index`を持つ。
 
-`index`の責務は`Scheduler`の呼び出し、初期化である。
+`index`の責務は`AutoLoader`の呼び出し、初期化である。
 `index`は対応するサイトごとに変種を作るべきである。たとえば、名古屋大学のLMSであるTACTに特有の`index`を作成する場合は
 `index-TACT.tsx`として作成されるべき。
 この対応は`manifest.ts`上に記述すること。
@@ -54,7 +54,7 @@ View上での操作はまずViewModelに捕捉され、各種必要な部分に�
 
 ## struct
 複数の機能、機能類型をまたいで利用される型を定義する。
-なお、ここに定義される型は極力シンプルであるべき。（データ型であるべき）
+なお、ここに定義される型は極力シンプルであるべき。（データ型:`interface`のうちメソッドを要求しないものであるべき）
 
 # コーディングのヒント
 
