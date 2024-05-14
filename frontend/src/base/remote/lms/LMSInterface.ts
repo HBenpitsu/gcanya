@@ -1,0 +1,3 @@
+interface LMSInterface {
+    fetchAssignmentList(): Assignment[];
+}
