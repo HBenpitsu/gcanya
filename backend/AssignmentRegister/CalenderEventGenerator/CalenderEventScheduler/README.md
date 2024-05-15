@@ -5,7 +5,7 @@
 課題を登録する時間区間の算出を`bitmap.py`に定義されている`FreeBusyBitMap`を利用しながら行う。
 
 `FreeBusyBitMap`から取得できるひとまとまりの空き時間区間をchunkあるいはfree_chunkとする。
-また、空き時間か否かを判定する基準とこれを実現する関数をspecあるいはchunk_specとする。
+また、空き時間か否かを判定する基準とそれに従ってchunkを生成する関数をspecあるいはchunk_specとする。
 `Scheduler`がスケジューリングの際に考慮する時間区間をscopeという。
 ただし内部的にscope自体が用いられることはなく、scopeの終わりのほうが切り取られた`margined_scope`が用いられている
 
@@ -24,7 +24,7 @@ bit演算などを用いて多少効率的な空き時間の算出を可能に�
 
 ## bitmapFactory
 
-上記にて導入されたFreeBusyBitMapを生成するための関数郡である。
+上記にて導入されたFreeBusyBitMapを生成するための関数群である。
 
 ### avoid_task_overlapping
 

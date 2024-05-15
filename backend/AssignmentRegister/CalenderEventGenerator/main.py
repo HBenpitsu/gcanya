@@ -21,7 +21,7 @@ class CalenderEventGenerator:
             self.google_calender_api_client,
             sleepSchedule=DEFAULT_SLEEP_SCHEDULE
         )
-        chunks = await scheduler.get_chunks_fullfill_specs(assignment.duration)
+        chunks = await scheduler.get_chunks_fulfill_specs(assignment.duration)
         for chunk in chunks:
             yield CalenderEvent(
                 title=assignment.title_of_assignment,

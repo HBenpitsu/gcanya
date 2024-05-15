@@ -86,7 +86,7 @@ class Scheduler:
     async def _last_chunk_spec(self, required_duration:timedelta):
         return [timespan(self.margined_scope.start + self.margined_scope.duration() - required_duration, self.margined_scope.end)]
     
-    async def get_chunks_fullfill_specs(self, required_duration:timedelta):
+    async def get_chunks_fulfill_specs(self, required_duration:timedelta):
         """primary,secondary,lastの順に取得を試み、条件を満たすchunkのリストが見つかったらそれを返す。"""
 
         specs: List[Callable[[timedelta],Coroutine[Any,Any,List[timespan]]]] = [
