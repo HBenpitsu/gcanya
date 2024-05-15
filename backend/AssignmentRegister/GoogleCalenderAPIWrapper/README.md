@@ -13,7 +13,7 @@
 
 # 例外
 
-各種exceptionに定義された例外が送出される可能性があるが、必要であればHTTPExceptionsを送出するのでBackendの上流はこれをハンドリングする必要はない。
+exceptionに定義された例外が送出される可能性があるが、必要であればHTTPExceptionsを送出するのでBackendの上流はこれをハンドリングする必要はない。
 
 ## TooManyEvents
 
