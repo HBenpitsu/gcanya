@@ -1,4 +1,4 @@
-from ..InterpackageObject.dataTransferObject import CalenderEvent
+from ..InterpackageObject.dataTransferObject import CalenderEvent,EventId
 from ..InterpackageObject.datetime_expansion import timespan
 from .exceptions import ReAuthorizationRequired, UnexpectedAPIResponce, TimeZoneUnspecified, TooManyEvents
 from datetime import datetime, timezone
@@ -115,7 +115,7 @@ class GoogleCalenderAPIClient:
                 end=datetime.fromisoformat(raw_busytime["end"])
             )
     
-    async def register_event(self, event:CalenderEvent)->str:
+    async def register_event(self, event:CalenderEvent)->EventId:
         """
         event_idを返します。
         """
@@ -141,7 +141,7 @@ class GoogleCalenderAPIClient:
         ) as resp:
             if resp.status == 200:
                 result = await resp.json()
-                return result["id"]
+                return EventId(value=result["id"])
             if resp.status == 401:
                 raise ReAuthorizationRequired(await resp.text())
             raise UnexpectedAPIResponce(await resp.text())

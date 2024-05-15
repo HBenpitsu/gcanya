@@ -2,6 +2,9 @@ from datetime import datetime,timedelta,time
 from pydantic import BaseModel,model_validator
 from typing import List
 
+class EventId(BaseModel):
+    value:str
+
 class SleepSchedule(BaseModel):
     go_to_bed:time
     wake_up:time
