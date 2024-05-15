@@ -34,6 +34,8 @@
     "redux-persist-webextension-storage": "^1.0.2",
     "reduxjs-toolkit-persist": "^7.2.1",
     "tailwind": "^4.0.0",
+    "temporal": "^0.7.1",
+    "temporal-polyfill": "^0.2.4",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {

@@ -5930,6 +5930,23 @@ tailwindcss@^3.4.3:
     resolve "^1.22.2"
     sucrase "^3.32.0"
 
+temporal-polyfill@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/temporal-polyfill/-/temporal-polyfill-0.2.4.tgz#fb3210f79ebe8018716f980dfcb2c115f5179d64"
+  integrity sha512-WA5p0CjQTkMjF9m8sP4wSYgpqI8m2d4q7wPUyaJOWhy4bI9mReLb2yGvTV4qf/DPMTe6H6M/Dig5KmTMB7ev6Q==
+  dependencies:
+    temporal-spec "^0.2.4"
+
+temporal-spec@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/temporal-spec/-/temporal-spec-0.2.4.tgz#7eb10447a62429ffaaa80b42b869b138ae306a75"
+  integrity sha512-lDMFv4nKQrSjlkHKAlHVqKrBG4DyFfa9F74cmBZ3Iy3ed8yvWnlWSIdi4IKfSqwmazAohBNwiN64qGx4y5Q3IQ==
+
+temporal@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/temporal/-/temporal-0.7.1.tgz#dd79946107c3414a24fffab7dd79243409ea6bd2"
+  integrity sha512-6Xd3c2llgkjGP7kn2LXuiHZ8/cRiIX5EsPcvn8slkAcayWEzf7xuXxd7BcgUm2djmI1DPFUSMFeFwQcLVMLsOw==
+
 test-exclude@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/test-exclude/-/test-exclude-6.0.0.tgz#04a8698661d805ea6fa293b6cb9e63ac044ef15e"

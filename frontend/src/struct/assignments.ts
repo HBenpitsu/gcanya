@@ -1,5 +1,0 @@
-interface Assignment {
-}
-interface AssignmentEntry {
-    
-}
