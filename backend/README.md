@@ -43,7 +43,7 @@ main: *エントリーポイント
 
 @developpers: `dummy.`ファイルを削除しないように。
 
-スクリプトとしての機能は環境変数を読み込むだけなので、すべての処理が`__init__.py`内に記述されている。 
+スクリプトとしての機能は環境変数を読み込むだけなので、すべての処理が`__init__.py`内に記述されている。
 [詳細](DEPLOY_SETTING/README.md)
 
 ### AuthHandler
@@ -104,7 +104,7 @@ from .main import {作成したクラスや定数名}
 
 e.g.
 
-```
+```directory
 \a
 |-\b
 | |-__init__.py
@@ -115,11 +115,13 @@ e.g.
 ```
 
 a\b\main.py
+
 ```python
 SOME_CONSTANT_VALUE="b_package"
 ```
 
 a\c\main.py
+
 ```python
 SOME_CONSTANT_VALUE="c_directory"
 ```
@@ -127,6 +129,7 @@ SOME_CONSTANT_VALUE="c_directory"
 としたとき、
 
 super.py
+
 ```python
 from b import SOME_CONSTANT_VALUE as B_CONST
 from c.main import SOME_CONSTANT_VALUE as C_CONST
@@ -135,6 +138,7 @@ from c.main import SOME_CONSTANT_VALUE as C_CONST
 とは書けるが
 
 super.py
+
 ```python
 from c import SOME_CONSTANT_VALUE as C_CONST
 ```
@@ -154,4 +158,3 @@ from c import SOME_CONSTANT_VALUE as C_CONST
 - リテラル("kouiuno"や123)の使用を避けること。バグの元。
 - ファイル名が含むクラスを適切に抽象化していることを確かめること。包含概念が見つからない場合ファイルを分ける。
 - リテラルをコードした定数やExceptionsのファイルは分けること。
-
