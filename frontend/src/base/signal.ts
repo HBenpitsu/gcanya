@@ -36,4 +36,10 @@ class SignalTransceiver {
             }
         }
     }
+
+    async wait_for_signal(signal:Signal,interval_ms:number = 1000) {
+        while (await this.storage.get(`signal_${signal}`)!=SignalState.UNPROCESSED) {
+            await new Promise(resolve => setTimeout(resolve, interval_ms));
+        }
+    }
 }
