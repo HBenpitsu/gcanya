@@ -3,8 +3,7 @@
 # 機能の分類
 
 ## View
-HTML/CSSの生成
-アニメーション
+HTML/CSSの生成返却、アニメーションの設定をする。
 
 ## ViewModel
 ViewはViewModelを監視し、表示する内容を決定する。
