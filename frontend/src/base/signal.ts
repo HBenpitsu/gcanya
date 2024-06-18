@@ -18,11 +18,12 @@ class SignalTransceiver {
         this.storage = storage;
     }
 
-    async send_signal(signal:Signal) {
+    async send_signal(signal:Signal){
         if (await this.storage.get(`signal_${signal}`)==SignalState.PROCESSING) {
-            return;
+            return SignalState.PROCESSING;
         }
         await this.storage.save(`signal_${signal}`, SignalState.UNPROCESSED);
+        return SignalState.UNPROCESSED;
     }
 
     async listen_to_signals(callback:(signal:Signal)=>void) {
