@@ -27,19 +27,18 @@ View上での操作はまずViewModelに捕捉され、各種必要な部分に�
 
 ## content,options,popup
 これらはそれぞれに
-`View`,`ViewModel`,`AutoLoader`,`index`を持つ。
+`View`,`ViewModel`,`index`を持つ。
 
-`index`以外の責務は[機能の分類](#機能の分類)の項で述べられている。
+`index`の責務は`AutoLoader`である。詳しくは[機能の分類](#機能の分類)の項で述べられている。
 
-`index`の責務はそれらの初期化、呼び出しである。
 `index`は対応するサイトごとに変種を作るべきである。たとえば、名古屋大学のLMSであるTACTに特有の`index`を作成する場合は
 `index-TACT.tsx`として作成されるべき。
 この対応は`manifest.ts`上に記述すること。
 
 ## background
-`AutoLoader`,`index`を持つ。
+`index`を持つ。
 
-`index`の責務は`AutoLoader`の呼び出し、初期化である。
+`index`の責務は`AutoLoader`である。詳しくは[機能の分類](#機能の分類)の項で述べられている。
 `index`は対応するサイトごとに変種を作るべきである。たとえば、名古屋大学のLMSであるTACTに特有の`index`を作成する場合は
 `index-TACT.tsx`として作成されるべき。
 この対応は`manifest.ts`上に記述すること。
