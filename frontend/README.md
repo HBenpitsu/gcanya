@@ -1,5 +1,7 @@
 # 環境
 
+拡張機能開発者が変更するものは全てsrc内にある。[src内のREADME.md](./src/README.md)
+
 ## セットアップ
 
 React@TSを使用する。
