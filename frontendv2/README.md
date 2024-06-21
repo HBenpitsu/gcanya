@@ -1,6 +1,6 @@
 # frontend開発者向けドキュメント
 
-使用したテンプレート自体のreadmeは[templeteREADME.md](./templeteREADME.md)に以降。
+使用したテンプレート自体のreadmeは[templeteREADME.md](./templeteREADME.md)に移行。
 
 本拡張機能の開発者が直接変更を加えるのはsrc内のファイルのみ。
 
