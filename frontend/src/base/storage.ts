@@ -9,6 +9,8 @@ export interface Storage {
     clear(): Promise<void>;
 }
 
+
+
 class ChromeStorage implements Storage{
 
     save(key: string, value: string) {
