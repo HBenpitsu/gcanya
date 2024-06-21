@@ -11,7 +11,7 @@ export class LMSHandler{
     constructor(private LMS: LMSInterface) {}
 
     static new(env: UserEnvironment) {
-        switch (env.usginLMS) {
+        switch (env.usingLMS) {
             case LMS.TACT:
                 return new LMSHandler(new LMSMock());
             case LMS.NU_MOODLE:
