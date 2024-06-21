@@ -13,21 +13,21 @@ const manifest = defineManifest(async (env) => ({
   description: 'カレンダーに自動で予定を追加して危機感煽ってくるヤツ です。',
   version,
   background: {
-    service_worker: 'AutoLoader/background/index.ts',
+    service_worker: 'entrypoints/background.ts',
   },
   content_scripts: [
     {
       matches: ['https://tact.ac.thers.ac.jp/*'],
-      js: ['UI/content/index.tsx'],
+      js: ['entrypoints/tact_content.ts'],
     },
   ],
   host_permissions: ['<all_urls>'],
   options_ui: {
-    page: 'UI/options/options.html',
+    page: 'entrypoints/options.html',
     open_in_tab: true,
   },
   action: {
-    default_popup: 'UI/popup/popup.html',
+    default_popup: 'entrypoints/popup.html',
     default_icon: {
       '16': 'images/extension_16.png',
       '32': 'images/extension_32.png',
