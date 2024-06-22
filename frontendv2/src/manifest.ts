@@ -15,9 +15,13 @@ const manifest = defineManifest(async (env) => ({
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', 'file:///*'],
-      js: ['content/index.tsx'],
+      matches: ['https://tact.ac.thers.ac.jp/*'],
+      js: ['content/NuTACT.tsx'],
     },
+    // {
+    //   matches: ['https://tact.ac.thers.ac.jp/*'],
+    //   js: ['content/NuMoodle.tsx'],
+    // },
   ],
   host_permissions: ['<all_urls>'],
   options_ui: {
