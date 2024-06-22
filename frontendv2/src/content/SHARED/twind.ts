@@ -8,7 +8,7 @@ import presetAutoprefix from '@twind/preset-autoprefix';
 import presetTailwind from '@twind/preset-tailwind';
 
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '../../tailwind.config';
+import tailwindConfig from '../../../tailwind.config';
 const fullConfig = resolveConfig(tailwindConfig);
 
 export const config = defineConfig({

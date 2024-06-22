@@ -1,16 +1,14 @@
-import '../global.css';
-import React from 'react';
+import { UsePopupModel } from "./PopupModel";
+import Popup from "./Popup";
 import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { proxyStore } from '../app/proxyStore';
-import Popup from './Popup';
+import React from 'react';
 
-proxyStore.ready().then(() => {
-  createRoot(document.getElementById('root') as HTMLElement).render(
+// popup.htmlへの挿入とPopupModelとPopupの紐付けのみ行う
+
+createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-      <Provider store={proxyStore}>
-        <Popup />
-      </Provider>
+        <UsePopupModel>
+            <Popup />
+        </UsePopupModel>
     </React.StrictMode>
-  );
-});
+);
