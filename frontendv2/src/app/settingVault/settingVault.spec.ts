@@ -1,5 +1,5 @@
 import { settingVault, __local__ } from './storageAccess';
-import { LMS, Interval_OfCatchUpWithLocalStorage_InMilliSec } from '../../utils';
+import { LMS, Interval_ForVault_ToCatchUpWithStorage_InMilliSec } from '../../utils';
 
 describe('settingVault', () => {
   it('should be defined', () => {
@@ -22,7 +22,7 @@ describe('settingVault', () => {
     });
     localStorage.setItem(__local__.Key.timestamp, 'outofdate');
     await new Promise((resolve) =>
-      setTimeout(resolve, Interval_OfCatchUpWithLocalStorage_InMilliSec * 3),
+      setTimeout(resolve, Interval_ForVault_ToCatchUpWithStorage_InMilliSec * 3),
     );
     expect(catchUpCalled).toBe(true);
   });

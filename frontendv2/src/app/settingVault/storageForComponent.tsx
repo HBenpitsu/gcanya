@@ -1,6 +1,6 @@
 import { ReactNode,FC,useContext,createContext,useState,useCallback,useMemo, useEffect, useRef } from 'react';
 import { settingVault } from './storageAccess';
-import { LMS, Interval_OfSyncComponentsWithStorage_InMilliSec } from '../../utils';
+import { LMS, Interval_ForComponents_ToSyncWithVault_InMilliSec } from '../../utils';
 
 type Props = {
     children: ReactNode;
@@ -47,7 +47,7 @@ export const UseSettingVault:FC<Props> = ({children}) => {
                 lastStamp = settingVault.updatedAt();
             }
         }
-        setInterval(catchUp,Interval_OfSyncComponentsWithStorage_InMilliSec);
+        setInterval(catchUp,Interval_ForComponents_ToSyncWithVault_InMilliSec);
     },[]);
 
     return (

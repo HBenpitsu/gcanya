@@ -1,4 +1,4 @@
-import { LMS, Interval_OfCatchUpWithLocalStorage_InMilliSec } from '../../utils';
+import { LMS, Interval_ForVault_ToCatchUpWithStorage_InMilliSec } from '../../utils';
 
 //ローカルストレージのキーを定義。リテラルでもいいが、変更があった場合に一箇所で修正できるように、変数にしている。
 const prefix = 'SettingVault/';
@@ -9,6 +9,9 @@ const Key = {
   colorTheme: prefix + 'colorTheme',
   timestamp: prefix + 'timestamp',
 };
+
+//拡張性のために抽象化
+const storage:Storage = localStorage;
 
 class SettingVault {
   //各値を保持する変数を定義。初期化時点ではfalsyな値を入れておく。
@@ -53,11 +56,11 @@ class SettingVault {
           throw e;
         }
       }
-    }, Interval_OfCatchUpWithLocalStorage_InMilliSec);
+    }, Interval_ForVault_ToCatchUpWithStorage_InMilliSec);
   }
 
   private storageTimestamp() {
-    return localStorage.getItem(Key.timestamp) || '';
+    return storage.getItem(Key.timestamp) || '';
   }
   private checkIfUpToDate() {
     if (this.storageTimestamp() !== this._updatedAt) {
@@ -70,7 +73,7 @@ class SettingVault {
     this.checkIfUpToDate();
     //timestampの更新
     this._updatedAt = String(Date.now());
-    localStorage.setItem(Key.timestamp, this._updatedAt);
+    storage.setItem(Key.timestamp, this._updatedAt);
   }
   private catchUp() {
     this.checkIfUpToDate();
@@ -90,10 +93,10 @@ class SettingVault {
   setColorTheme(theme: string) {
     this.updateTimestamp();
     this.colorTheme = theme;
-    localStorage.setItem(Key.colorTheme, theme);
+    storage.setItem(Key.colorTheme, theme);
   }
   fetchColorTheme() {
-    this.colorTheme = localStorage.getItem(Key.colorTheme) || '';
+    this.colorTheme = storage.getItem(Key.colorTheme) || '';
     return this.colorTheme;
   }
   getColorTheme() {
@@ -107,10 +110,10 @@ class SettingVault {
   setCurrentLMS(lms: LMS) {
     this.updateTimestamp();
     this.currentLMS = lms;
-    localStorage.setItem(Key.currentLMS, lms);
+    storage.setItem(Key.currentLMS, lms);
   }
   fetchCurrentLMS() {
-    this.currentLMS = (localStorage.getItem(Key.currentLMS) as LMS) || LMS.UNDEFINED;
+    this.currentLMS = (storage.getItem(Key.currentLMS) as LMS) || LMS.UNDEFINED;
     return this.currentLMS;
   }
   getCurrentLMS() {
@@ -124,10 +127,10 @@ class SettingVault {
   setUsingLMS(lms: LMS[]) {
     this.updateTimestamp();
     this.usingLMS = lms;
-    localStorage.setItem(Key.usingLMS, JSON.stringify(lms));
+    storage.setItem(Key.usingLMS, JSON.stringify(lms));
   }
   fetchUsingLMS() {
-    let usingLMS = localStorage.getItem(Key.usingLMS);
+    let usingLMS = storage.getItem(Key.usingLMS);
 
     if (usingLMS) {
       this.usingLMS = (JSON.parse(usingLMS) as LMS[]) || [];
@@ -147,11 +150,11 @@ class SettingVault {
   setDefaultDurationOfAssignmentInMin(time: number) {
     this.updateTimestamp();
     this.defaultDurationOfAssignmentInMin = time;
-    localStorage.setItem(Key.defaultDurationOfAssignmentInMin, String(time));
+    storage.setItem(Key.defaultDurationOfAssignmentInMin, String(time));
   }
   fetchDefaultDurationOfAssignmentInMin() {
     this.defaultDurationOfAssignmentInMin = Number(
-      localStorage.getItem(Key.defaultDurationOfAssignmentInMin) || 0,
+      storage.getItem(Key.defaultDurationOfAssignmentInMin) || 0,
     );
     return this.defaultDurationOfAssignmentInMin;
   }

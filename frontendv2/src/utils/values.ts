@@ -7,8 +7,8 @@ export enum LMS {
 }
 
 //settingVault
-export const Interval_OfSyncComponentsWithStorage_InMilliSec = 10;
-export const Interval_OfCatchUpWithLocalStorage_InMilliSec = 10;
+export const Interval_ForComponents_ToSyncWithVault_InMilliSec = 10;
+export const Interval_ForVault_ToCatchUpWithStorage_InMilliSec = 10;
 
 //assignmentFetcher
 export const LMS_URLS = {
