@@ -3,9 +3,9 @@ import { useState,useEffect } from 'react';
 
 export const useLMSList = ()=>{
 
-    const [usingLMSList, setUsingLMSList] = useState(settingVault.usingLMSList);
+    const [usingLMSList, setUsingLMSList] = useState(settingVault.LMSList);
     useEffect(//初回レンダリング時のみ実行。
-        ()=>{settingVault.addUsingLMSListUpdateListener(async (list)=>{setUsingLMSList(list)});},[]
+        ()=>{settingVault.addLMSListUpdateListener(async (list)=>{setUsingLMSList(list)});},[]
     );
     return usingLMSList;
 }

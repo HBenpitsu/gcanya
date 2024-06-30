@@ -1,41 +1,44 @@
-import { UsingLMS, UITheme, Keys } from './settings';
+import { LMS, UITheme, Keys } from './settings';
 import { vault } from '../vault';
 import { Temporal } from 'temporal-polyfill';
 
 class SettingVault {
+
     constructor() {
-        vault.setDefault(Keys.usingLMSList, '[]'); 
-        vault.addUpdateListener(Keys.usingLMSList, this.listenToUsingLMSListUpdate);
-        vault.setDefault(Keys.UITheme, UITheme.light);
-        vault.addUpdateListener(Keys.UITheme, this.listenToUIThemeUpdate);
-        vault.setDefault(Keys.defaultAssignmentDuration, '30');
-        vault.addUpdateListener(Keys.defaultAssignmentDuration, this.listenToDefaultAssignmentDurationUpdate);
+        vault.setDefault(Keys.LMSList, '[]'); 
+        vault.addUpdateListener(Keys.LMSList, async (val)=>{this.listenToLMSListUpdate(val)}); //クロージャにしないとthisがundefinedになる。
+        vault.setDefault(Keys.UITheme, UITheme.light as string);
+        vault.addUpdateListener(Keys.UITheme, async (val)=>{this.listenToUIThemeUpdate(val)});
+        vault.setDefault(Keys.defaultAssignmentDuration, String(Temporal.Duration.from({minutes: 30})));
+        vault.addUpdateListener(Keys.defaultAssignmentDuration, async (val)=>{this.listenToDefaultAssignmentDurationUpdate(val)});
+    }
+    
+    private _LMSList: LMS[] = [];
+    get LMSList(): LMS[] {
+        return this._LMSList;
+    }
+    addLMS(lms:LMS){
+        if (this._LMSList.includes(lms)){return;}// 重複を許さない
+        this._LMSList.push(lms); 
+        vault.set(Keys.LMSList, JSON.stringify(this._LMSList));
+        // vaultがlistenToLMSListUpdateを呼び出すので、updateListenerは呼び出さない。
+    }
+    removeLMS(lms:LMS){
+        if (!this._LMSList.includes(lms)){return;}// もともとない場合は何もしない
+        this._LMSList = this._LMSList.filter(l => l !== lms);
+        vault.set(Keys.LMSList, JSON.stringify(this._LMSList));
+        // vaultがlistenToLMSListUpdateを呼び出すので、updateListenerは呼び出さない。
     }
 
-
-    private _usingLMSList: UsingLMS[] = [];
-    get usingLMSList(): UsingLMS[] {
-        return this._usingLMSList;
-    }
-    addLMS(lms:UsingLMS){
-        this._usingLMSList.push(lms); 
-        vault.set(Keys.usingLMSList, JSON.stringify(this._usingLMSList));
-        // vaultがlistenToUsingLMSListUpdateを呼び出すので、updateListenerは呼び出さない。
-    }
-    removeLMS(lms:UsingLMS){
-        this._usingLMSList = this._usingLMSList.filter(l => l !== lms);
-        vault.set(Keys.usingLMSList, JSON.stringify(this._usingLMSList));
-        // vaultがlistenToUsingLMSListUpdateを呼び出すので、updateListenerは呼び出さない。
-    }
-
-    private usingLMSListUpdateListeners: ((val: UsingLMS[]) => Promise<void>)[] = [];
-    async listenToUsingLMSListUpdate(val: string){
+    private LMSListUpdateListeners: ((val: LMS[]) => Promise<void>)[] = [];
+    async listenToLMSListUpdate(val: string){
         //自分自身の変更もstringifyされた後にparseされて再代入されるというオーバーヘッドはあるが、流れをシンプルにするために目を瞑る。
-        this._usingLMSList = JSON.parse(val) as UsingLMS[];
-        for(const listener of this.usingLMSListUpdateListeners){listener(this._usingLMSList);}
+        //ここでエラーを吐かれると何故かaddLMSを呼んだ時点で無限ループに陥って処理が進まなくなってしまう。プロミス関連のリトライのせいかも知れないが、具体的な原因は不明。
+        this._LMSList = JSON.parse(val) as LMS[];
+        for(const listener of this.LMSListUpdateListeners){listener(this._LMSList);}
     }
-    addUsingLMSListUpdateListener(listener: (val: UsingLMS[]) => Promise<void>){
-        this.usingLMSListUpdateListeners.push(listener);
+    addLMSListUpdateListener(listener: (val: LMS[]) => Promise<void>){
+        this.LMSListUpdateListeners.push(listener);
     }
 
 
@@ -75,6 +78,7 @@ class SettingVault {
     addDefaultAssignmentDurationUpdateListener(listener: (val: Temporal.Duration) => Promise<void>){
         this.defaultAssignmentDurationUpdateListeners.push(listener);
     }
+
 }
 
 // シングルトン

@@ -3,13 +3,13 @@ export enum UITheme{
     dark = 'dark'
 }
 
-export enum UsingLMS{
+export enum LMS{
     NuTACT = 'NuTACT',
     NuMoodle = 'NuMoodle'
 }
 
 export const Keys = {
-    usingLMSList: 'UsingLMSList',
+    LMSList: 'LMSList',
     UITheme: 'UITheme',
     defaultAssignmentDuration: 'DefaultAssignmentDuration',
 };

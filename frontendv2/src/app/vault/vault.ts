@@ -114,7 +114,9 @@ class Vault {
 
     private callUpdateListeners(key: VaultKey, value: VaultValue): void {
         if (key in this.updateListeners){
-            this.updateListeners[key].forEach((listener) => listener(value));
+            for (let listener of this.updateListeners[key]) {
+                listener(value);
+            }
         }
 
     }
@@ -124,8 +126,5 @@ class Vault {
 // シングルトンで良いだろう
 export const vault: Vault = new Vault();
 
-// catchUpを定期的に行う。vaultの初期化完了までに時間がかかってTypeErrorが発生するので握りつぶしておく。
-setInterval(()=>{
-    try {vault.catchUp()}
-    catch (e) { if (!(e instanceof TypeError)) {throw e;} }
-}, vaultCatchUpInterval)
+// vault.catchUpを直接呼び出すと、catchUp内でthisがundefinedになるので、クロージャを作る。
+setInterval(()=>{vault.catchUp()}, vaultCatchUpInterval)
