@@ -9,7 +9,7 @@ export enum LMS{
 }
 
 export const Keys = {
-    LMSList: 'LMSList',
-    UITheme: 'UITheme',
-    defaultAssignmentDuration: 'DefaultAssignmentDuration',
+    LMSList: 'settings/LMSList',
+    UITheme: 'settings/UITheme',
+    defaultAssignmentDuration: 'settings/DefaultAssignmentDuration',
 };
