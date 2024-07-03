@@ -1,4 +1,4 @@
-import { LMS } from '../../settingVault';
+import { LMS } from '../../setting';
 import { LMS_URLS } from '../data';
 import { Assignment } from '../../../utils';
 import {

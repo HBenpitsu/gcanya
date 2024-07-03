@@ -1,4 +1,4 @@
-import { LMS } from '../settingVault';
+import { LMS } from '../setting';
 
 export const LMS_URLS = {
     UNDEFINED: '',
