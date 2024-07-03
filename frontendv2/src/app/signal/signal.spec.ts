@@ -1,7 +1,7 @@
 import { describe,it,expect,beforeEach,afterEach,beforeAll,afterAll } from '@jest/globals'
 import { signalSender,Signal,SignalState,signalReceiver} from './signal';
 
-import { vaultCatchUpInterval } from '../../utils';
+import { vaultCatchUpInterval } from '../vault/vault';
 
 describe("signal",()=>{
     it("should be defined",()=>{

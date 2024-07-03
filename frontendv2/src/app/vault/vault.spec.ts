@@ -1,5 +1,5 @@
 import { vault,timestampSignature } from './vault';
-import { vaultCatchUpInterval } from '../../utils';
+import { vaultCatchUpInterval } from './vault';
 
 describe('vault', () => {
   it('should be defined', () => {

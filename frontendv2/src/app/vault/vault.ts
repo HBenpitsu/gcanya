@@ -1,9 +1,8 @@
-import { vaultCatchUpInterval } from "../../utils";
-
 const storage:Storage = localStorage;
 
 //exportはテスト用
 export const timestampSignature= 'vault-set-timestamp';
+export const vaultCatchUpInterval = 100;
 
 type VaultKey = string;
 type VaultValue = string;

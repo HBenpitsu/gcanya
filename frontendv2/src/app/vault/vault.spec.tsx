@@ -3,7 +3,7 @@ import React, { useContext,FC } from 'react';
 import { describe,it,expect,beforeEach,afterEach,beforeAll,afterAll } from '@jest/globals'
 import { useVault } from './useVault';
 import { vault } from './vault';
-import { vaultCatchUpInterval } from '../../utils';
+import { vaultCatchUpInterval } from './vault';
 
 describe('useVault function', () => {
     it('should be defined', () => {

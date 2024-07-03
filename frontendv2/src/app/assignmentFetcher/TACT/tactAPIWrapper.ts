@@ -1,4 +1,6 @@
-import { LMS_URLS, LMS, Assignment } from '../../../utils';
+import { LMS } from '../../settingVault';
+import { LMS_URLS } from '../data';
+import { Assignment } from '../../../utils';
 import {
   AssignmentListResponseNotation,
   FavoritesListResponseNotation,

@@ -1,7 +1,7 @@
 import { cleanup, render, screen, act } from '@testing-library/react';
 import React, { useContext,FC } from 'react';
 import { describe,it,expect,beforeEach,afterEach,beforeAll,afterAll } from '@jest/globals'
-import { vaultCatchUpInterval } from '../../utils';
+import { vaultCatchUpInterval } from '../vault/vault';
 import { useLMSList,useDefaultAssignmentDuration,useUITheme } from './useSetting';
 import { settingVault } from './settingVault';
 import { LMS, UITheme } from './settings';
