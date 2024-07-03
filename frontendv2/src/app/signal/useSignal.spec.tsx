@@ -13,26 +13,39 @@ describe('useSetting functions ', () => {
 
     it ('should be able to be used in components', async () => {
         
+        // signalReceiver.setSignalHandler(Signal.OAuth, async () => {
+        //     await new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval*3));
+        //     console.log("handling", new Date());
+        // });
+        // signalSender.addSignalStateListener(Signal.OAuth, (state) => {console.log("stateUpdated",state, new Date())});
+        
+        // const Child = () => {
+        //     const [signalState, sendSignal] = useOAuthSignal();
+        //     return <>{signalState}</>
+        // }
+        // render(<Child />);
+        // screen.getByText(SignalState.INNACTIVE);
+
+        // act(() => {signalSender.send(Signal.OAuth);})
+        // screen.debug();
+        // await act(async () => {new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval * 2))});
+        // console.log(vault.get(Signal.OAuth));
+        // screen.debug();
+        // await act(async () => {new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval * 2))});
+        // console.log(vault.get(Signal.OAuth));
+        // screen.debug();
+
         signalReceiver.setSignalHandler(Signal.OAuth, async () => {
             await new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval*3));
-            console.log("handling");
+            console.log("handling", new Date());
         });
-        signalSender.addSignalStateListener(Signal.OAuth, (state) => {console.log("stateUpdated",state)});
+        signalSender.addSignalStateListener(Signal.OAuth, (state) => {console.log("stateUpdated",state, new Date())});
         
-        const Child = () => {
-            const [signalState, sendSignal] = useOAuthSignal();
-            return <>{signalState}</>
-        }
-        render(<Child />);
-        screen.getByText(SignalState.INNACTIVE);
-
-        await act(async () => {signalSender.send(Signal.OAuth);})
-        screen.debug();
-        await act(async () => {new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval * 2))});
+        signalSender.send(Signal.OAuth);
+        
+        await new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval * 2));
         console.log(vault.get(Signal.OAuth));
-        screen.debug();
-        await act(async () => {new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval * 2))});
+        await new Promise((resolve) => setTimeout(resolve, vaultCatchUpInterval * 2));
         console.log(vault.get(Signal.OAuth));
-        screen.debug();
     })
 })
