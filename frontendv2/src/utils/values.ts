@@ -6,13 +6,6 @@ export enum LMS {
   NuMoodle = 'NuMoodle',
 }
 
-//settingVault
-export const Interval_ForComponents_ToSyncWithVault_InMilliSec = 10;
-export const Interval_ForVault_ToCatchUpWithStorage_InMilliSec = 10;
-
-//signal
-export const Interval_ForTransciever_ToCheckSignal_InMilliSec = 10;
-
 //vault
 export const vaultCatchUpInterval = 100;
 
