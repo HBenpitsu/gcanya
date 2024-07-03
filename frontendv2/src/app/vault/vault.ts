@@ -20,6 +20,8 @@ class Vault {
     private defaultValues: Record<VaultKey, VaultValue> = {};
     private cachedValues: Record<VaultKey, VaultValue> = {};
 
+    constructor() {this.catchUp()}
+
     private updateStorageSignature(): void {
         //シグネチャを上書き前する前に、最新であるか確認する。さもなくばoutOfDateかを判断できない。
         this.checkIfUpToDate();
@@ -31,17 +33,19 @@ class Vault {
 
     private checkIfUpToDate(): boolean {
         //シグネチャが一致していなければ、最新でないと判断。一致している場合は場合は現在の状態を保留する。
-        if (this.storageSignature !== storage.getItem(timestampSignature)) {
+        const real_signature = storage.getItem(timestampSignature);
+        if (this.storageSignature !== real_signature) {
             this.isUpToDate = false;
         }
         return this.isUpToDate;
     }
 
-    catchUp(): void{
+    async catchUp(): Promise<void>{
         // 最新でない場合は、ローカルストレージから値を取得し直す。
         // キャッシュの値が異なったKeyのアップデートリスナーを呼ぶ。また、監視中のキーを初めてキャッシュできた場合もアップデートリスナーを呼ぶ。
         this.checkIfUpToDate();
         if (!this.isUpToDate) {
+            let promise_buf = [];
             for (let key of this.observedKeys) {
                 let fetchedValue = storage.getItem(key);
                 if ( 
@@ -52,12 +56,13 @@ class Vault {
                     )
                 ) {
                     this.cachedValues[key] = fetchedValue!;
-                    this.callUpdateListeners(key, fetchedValue!);
+                    promise_buf.push(this.callUpdateListeners(key, fetchedValue!));
                 }
             }
             // プロセスが持つシグネチャをローカルストレージのものと合わせて、upToDateフラグを立てる。
             this.storageSignature = storage.getItem(timestampSignature) ?? '';
             this.isUpToDate = true;
+            await Promise.all(promise_buf);
         }
     }
 
@@ -85,7 +90,7 @@ class Vault {
         return this.cachedValues[key];
     }
 
-    set(key: VaultKey, value: VaultValue): void {
+    async set(key: VaultKey, value: VaultValue): Promise<void> {
         // キーが監視されていなければ監視する。続けてストレージ、キャッシュに値を書き込んで、アップデートリスナーを呼ぶ。
         // ストレージに値を書き込むときシグネチャを更新する。
         this.observe(key);
@@ -94,7 +99,7 @@ class Vault {
         storage.setItem(key, value);
 
         this.cachedValues[key] = value;
-        this.callUpdateListeners(key, value);
+        await this.callUpdateListeners(key, value);
     }
 
     setDefault(key: VaultKey, value: VaultValue): void {
@@ -112,11 +117,13 @@ class Vault {
         this.updateListeners[key].push(listener);
     }
 
-    private callUpdateListeners(key: VaultKey, value: VaultValue): void {
+    private async callUpdateListeners(key: VaultKey, value: VaultValue): Promise<void> {
         if (key in this.updateListeners){
+            let promise_buf = [];
             for (let listener of this.updateListeners[key]) {
-                listener(value);
+                promise_buf.push(listener(value));
             }
+            await Promise.all(promise_buf);
         }
 
     }

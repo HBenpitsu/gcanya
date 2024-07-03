@@ -1,4 +1,5 @@
 import { vault } from '../vault';
+import { allowBlocking } from '../../utils';
 
 export enum SignalState{
     INNACTIVE = 'INNACTIVE',
@@ -13,13 +14,17 @@ export enum Signal{
 
 class SignalReceiver{
     private handledSignals: Signal[] = [];
+    private processing: boolean = false;
     setSignalHandler(signal: Signal, callback: () => Promise<void>){
         if (this.handledSignals.includes(signal)){throw new Error('signal '+signal+' handler was added multiple times.');}
         vault.addUpdateListener(signal, async (state) => {
-            if (state === SignalState.UNPROCESSED){ // UNPROCESSED以外の状態への変化を感知すると無限ループになってしまう
-                vault.set(signal, SignalState.PROCESSING);
+            if (!this.processing && state === SignalState.UNPROCESSED){
+                this.processing = true;
+                await allowBlocking(); 
+                await vault.set(signal, SignalState.PROCESSING);
                 await callback();
-                vault.set(signal, SignalState.PROCESSED);
+                await vault.set(signal, SignalState.PROCESSED);
+                this.processing = false;
             }
         });
         this.handledSignals.push(signal);
@@ -33,16 +38,16 @@ class SignalSender{
     constructor(){
         vault.setDefault(Signal.OAuth, SignalState.INNACTIVE);
     }
-    send(signal: Signal){
+    async send(signal: Signal){
         if (
             vault.get(signal) === SignalState.PROCESSING 
             || vault.get(signal) === SignalState.UNPROCESSED
         ){return;}
-        vault.set(signal, SignalState.UNPROCESSED);
+        await vault.set(signal, SignalState.UNPROCESSED);
     }
     addSignalStateListener(signal: Signal, callback: (state: SignalState) => void){
         vault.addUpdateListener(signal, async (state) => {
-            callback(state as SignalState);
+            await callback(state as SignalState);
         });
     }
 }
