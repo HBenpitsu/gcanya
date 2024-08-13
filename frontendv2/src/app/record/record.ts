@@ -1,38 +1,30 @@
+import { RecordVault } from "./recordVault";
 
 export class Record{
-    public fields: string[];
-    public values: any[];
+    protected recordVault: RecordVault;
+    protected values: any[];
 
-    constructor( fields: string[], values: any[] ) {
-        this.fields = fields;
+    constructor( recordVault: RecordVault, values: any[] ) {
+        this.recordVault = recordVault;
         this.values = values;
     }
 
-    static parseStr( record_string: string ) {
-        const obj = JSON.parse(record_string);
-        let record = new Record(obj.fields, obj.values);
+    static parseStr( recordVault: RecordVault, values: string ) {
+        const parsed_values = JSON.parse(values);
+        let record = new Record(recordVault, parsed_values);
         return record;
     }
 
-    static parseObj( obj: any ) {
-        let fields: string[] = [];
+    static parseObj( recordVault: RecordVault, obj: any ) {
         let values: any[] = [];
-        for (const key in obj) {
-            fields.push(key);
+        for (let key of recordVault.fields) {
             values.push(obj[key]);
         }
-        return new Record(fields, values);
-    }
-
-    dump() {
-        return JSON.stringify({
-            fields: this.fields,
-            values: this.values,
-        });
+        return new Record(recordVault, values);
     }
 
     get( field: string ) {
-        const index = this.fields.indexOf(field);
+        const index = this.recordVault.fields.indexOf(field);
         if (index === -1) {
             throw new Error('Field not found');
         }
@@ -40,18 +32,16 @@ export class Record{
     }
 
     set( field: string, value: any ) {
-        const index = this.fields.indexOf(field);
+        const index = this.recordVault.fields.indexOf(field);
         if (index === -1) {
             throw new Error('Field not found');
         } else {
             this.values[index] = value;
         }
+        this.recordVault.dump();
     }
 
-    asObj<T>( obj: T ): T {
-        for (const key in obj) {
-            obj[key] = this.get(key);
-        }
-        return obj;
+    unwrap() {
+        return this.values;
     }
 }

@@ -1,6 +1,5 @@
-import { cleanup, render, screen, act } from '@testing-library/react';
-import React, { useContext,FC } from 'react';
-import { describe,it,expect,beforeEach,afterEach,beforeAll,afterAll } from '@jest/globals'
+import { render, screen, act } from '@testing-library/react';
+import { describe,it,expect } from '@jest/globals'
 import { sleep } from '../../utils';
 import { useOAuthSignal } from './useSignal';
 import { signalSender,Signal, signalReceiver,SignalState } from './signal';

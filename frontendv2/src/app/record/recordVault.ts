@@ -2,44 +2,47 @@ import { Record } from './record';
 import { vault } from '../vault';
 
 const recordVaultKey = 'recordVaultKey';
+const valuesKey = 'ForValuesOf';
+const fieldsKey = 'ForFieldsOf';
 
 export class RecordVault {
+    protected _fields: string[] = [];
+    get fields() { return this._fields; }
     private _recordList: Record[] = [];
-    public recordVaultId: string = "";
+    protected recordValueVaultId: string = "";
 
-    constructor(recordVaultId: string) {
-        this.recordVaultId = recordVaultKey+recordVaultId;
-        
-        vault.setDefault(this.recordVaultId, JSON.stringify([]));
+    constructor(fields: string[],recordVaultId: string) {
+        this.recordValueVaultId = recordVaultKey+valuesKey+recordVaultId;
+        this._fields = fields;
 
-        vault.addUpdateListener(
-            this.recordVaultId, 
-            async (value) => {
+        vault.setDefault(this.recordValueVaultId, "[]");
+
+        this.addVaultUpdateListener(
+            async (vaultString) => {
             this._recordList = 
                 JSON
-                .parse(value)
-                .map((record_string: string) => Record.parseStr(record_string))
+                .parse(vaultString)
+                .map((values: any[]) => new Record(this, values))
             }
         );
         
         this._recordList = 
             JSON
-            .parse(vault.fetch(this.recordVaultId))
-            .map((record_string: string) => Record.parseStr(record_string));
+            .parse(vault.fetch(this.recordValueVaultId))
+            .map((values: any[]) => new Record(this, values));
+    }
+
+    addVaultUpdateListener( callback: (value: string)=>Promise<void> ) {
+        vault.addUpdateListener(this.recordValueVaultId, callback);
     }
 
     push( record: Record ) {
         this._recordList.push(record);
-        vault.set(
-            this.recordVaultId, 
-            JSON.stringify(
-                this._recordList.map((rec: Record) => rec.dump())
-            )
-        );
+        this.dump();
     }
 
     pushObj( obj: any ) {
-        this.push(Record.parseObj(obj));
+        this.push(Record.parseObj(this, obj));
     }
 
     filter( callback: ( rec: Record )=>boolean ) {
@@ -51,21 +54,26 @@ export class RecordVault {
     }
 
     sort( callback: ( a: Record, b: Record )=>number ) {
-        return this._recordList.sort(callback);
+        this._recordList.sort(callback);
+        this.dump();
     }
 
     drop( callback: ( rec: Record )=>boolean ) {
         this._recordList = this._recordList.filter((rec: Record) => !callback(rec));
-        vault.set(
-            this.recordVaultId, 
-            JSON.stringify(
-                this._recordList.map((rec: Record) => rec.dump())
-            )
-        );
+        this.dump();
     }
 
     clear() {
         this._recordList = [];
-        vault.set( this.recordVaultId, "[]" );
+        this.dump();
+    }
+
+    dump() {        
+        vault.set(
+            this.recordValueVaultId, 
+            JSON.stringify(
+                this._recordList.map(rec => rec.unwrap())
+            )
+        );
     }
 }
