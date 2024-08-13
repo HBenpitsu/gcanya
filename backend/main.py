@@ -1,5 +1,4 @@
 from fastapi import Request, Response
-from shared.AssignmentEntry import AssignmentEntry
 from AssignmentRegister import AssignmentHandler
 from AuthHandler import GoogleAPITokenHandler
 from server import Server
