@@ -17,27 +17,28 @@ TS(TypeScript)はJavaScriptの派生なので、
 
 npmが用意できたら、
 
-```
+```:console
 npm install -g yarn
 ```
 
 を実行して、yarnをインストール。
 `./frontend`をカレントディレクトリとして、
 
-```
+```:console
 yarn install
 ```
+
 を実行すれば必要なパッケージが自動でインストールされてセットアップは完了。
 
 ## ビルド
 
-```
+```:console
 yarn build
 ```
 
 でビルドされる。`dist`というフォルダができるので、これをブラウザに読み込ませれば良い。
 
-```
+```:console
 yarn dev
 ```
 
