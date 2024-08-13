@@ -1,3 +1,6 @@
+
+# signal
+
 基本的にbackgroundへの処理の委譲を実現する手段として用いる。
 signalの送信は`send_signal`メソッド、
 signalの受信はcallback関数を取る`listen_to_signals`か、特定のSignalを受け取るまで待機する`wait_for_signal`で行う。

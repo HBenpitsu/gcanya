@@ -1,3 +1,8 @@
+
+[戻る](../README.md)
+
+# vault
+
 localStorageをラップして、
 
 - 複数のプロセスの協働
@@ -5,5 +10,3 @@ localStorageをラップして、
   - ハンドラの設定
 
 を行えるようにする。
-
-settingVaultとsignalを作った時点でこの機能は別に抽出されるべきだと判断して作成した。
