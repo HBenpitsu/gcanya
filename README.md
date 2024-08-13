@@ -20,4 +20,3 @@
 ## shared
 
 - frontend,backend間での通信におけるデータ構造を規定
-- 
