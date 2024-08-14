@@ -1,5 +1,5 @@
 import { vault } from '../vault';
-import { allowBlocking } from '../../utils';
+import { allowBlocking, sleep } from '../../utils';
 
 export enum SignalState{
     INNACTIVE = 'INNACTIVE',
@@ -9,10 +9,12 @@ export enum SignalState{
 }
 
 export enum Signal{
+    AuthURLShown = 'signal/AuthURLToBeShown',
     OAuth = 'signal/OAuth',
+    Register = 'signal/Register',
 }
 
-class SignalReceiver{
+class Handler{
     private handledSignals: Signal[] = [];
     private processing: boolean = false;
     setSignalHandler(signal: Signal, callback: () => Promise<void>){
@@ -32,11 +34,11 @@ class SignalReceiver{
 }
 
 // シングルトン
-export const signalReceiver = new SignalReceiver();
+export const signalHandler = new Handler();
 
-class SignalSender{
+class Terminal{
     constructor(){
-        vault.setDefault(Signal.OAuth, SignalState.INNACTIVE);
+        vault.setDefault(Signal.AuthURLShown, SignalState.INNACTIVE);
     }
     async send(signal: Signal){
         if (
@@ -50,7 +52,15 @@ class SignalSender{
             await callback(state as SignalState);
         });
     }
+    observe(signal: Signal){
+        return vault.get(signal) as SignalState;
+    }
+    async wait(signal: Signal, interval_ms: number=10){
+        while (vault.get(signal) !== SignalState.PROCESSED){
+            await sleep(interval_ms);
+        }
+    }
 }
 
 // シングルトン
-export const signalSender = new SignalSender();
+export const signalTerminal = new Terminal();
