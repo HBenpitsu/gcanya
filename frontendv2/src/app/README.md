@@ -45,7 +45,7 @@ signalの受信はcallback関数を取る`listen_to_signals`か、特定のSigna
 
 ### record
 
-- 
+- 課題情報の保存
 
 ### assignmentFetcher
 
