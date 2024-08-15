@@ -1,16 +1,16 @@
 import { AssignmentRecord } from "../assignmentRecord";
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = "http://localhost:8080";
 
 export namespace endpoint{
 
 export async function register(assignmentRecord: AssignmentRecord) {
-    let fetched =  await fetch(`${BACKEND_URL}/register`, {
+    let fetched = await fetch(`${BACKEND_URL}/register`, {
         method: "POST",
         body: JSON.stringify({
             course_name:assignmentRecord.course_name,
             title_of_assignment:assignmentRecord.title,
-            dueDate:assignmentRecord.dueDate.toString(),
+            dueDate:assignmentRecord.dueDate.toInstant().toString(),
             duration:assignmentRecord.duration.toString(),
             description:assignmentRecord.description,
         }),
@@ -28,7 +28,7 @@ export async function register(assignmentRecord: AssignmentRecord) {
 }
 
 export async function getAuthFlowState() {
-    let fetched = await fetch(`${BACKEND_URL}/authFlowState`);
+    let fetched = await fetch(`${BACKEND_URL}/getAuthFlowState`);
     if (fetched.status == 200) {
         return await fetched.json();
     } else {
@@ -37,7 +37,7 @@ export async function getAuthFlowState() {
 }
 
 export async function getTokens() {
-    let fetched = await fetch(`${BACKEND_URL}/tokens`);
+    let fetched = await fetch(`${BACKEND_URL}/getTokens`);
     if (fetched.status == 200) {
         return await fetched.json();
     } else if (fetched.status == 401 || fetched.status == 400) {

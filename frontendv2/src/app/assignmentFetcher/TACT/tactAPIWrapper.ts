@@ -1,12 +1,13 @@
 import { LMS } from '../../setting';
 import { LMS_URLS } from '../data';
-import { Assignment } from '../../../utils';
 import {
   AssignmentListResponseNotation,
   FavoritesListResponseNotation,
   SiteListResponseNotation,
   SiteCourseIDResponseNotation as CourseDetailResponseNotation,
 } from './type';
+import { AssignmentRecordStruct } from '../../assignmentRecord/assignmentRecord';
+import { Temporal } from 'temporal-polyfill';
 
 class TACTAPIWrapper {
   static baseUrl = LMS_URLS[LMS.NuTACT];
@@ -39,16 +40,17 @@ class TACTAPIExploiter {
     this.api = api;
   }
 
-  async allAssignments(): Promise<Assignment[]> {
+  async allAssignments(): Promise<AssignmentRecordStruct[]> {
     const json = await this.api.allAssignments();
-    const assignments = json.assignment_collection.map(async (assignment) => {
+    const assignments: Promise<AssignmentRecordStruct>[] = json.assignment_collection.map(async (assignment) => {
       const course = await this.api.courseDetail(assignment.context);
       return {
-        assignmentId: assignment.id,
-        courseName: course.title,
+        id: assignment.id,
         title: assignment.entityTitle,
-        dueDate: new Date(assignment.dropDeadTimeString),
         description: assignment.instructions,
+        course_id: course.id,
+        course_name: course.title,
+        dueDate: Temporal.ZonedDateTime.from(assignment.dropDeadTimeString),
       };
     }); //コルーチンのリスト
     return await Promise.all(assignments); //オブジェクトのリストに
