@@ -1,9 +1,12 @@
-import { Signal, SignalState, signalTerminal } from "../signal";
+import { Signal, signalTerminal } from "../signal";
 import { endpoint } from "./endpoint";
 import { vault } from "../vault";
 import { sleep } from "../../utils";
 
+vault.setDefault('authorized', 'false');
+
 export async function authorize() { // backgroundで呼び出し
+    vault.set('authorized', 'false');
     let authorization_should_be_done_from_scratch = true;
     while(authorization_should_be_done_from_scratch){
         authorization_should_be_done_from_scratch = false;
@@ -16,6 +19,7 @@ export async function authorize() { // backgroundで呼び出し
             let ret = await endpoint.getTokens();
             if (ret.detail == "success") {
                 got_tokens = true;
+                vault.set('authorized', 'true');
             } else if (ret.detail == "Unauthorized") {
                 got_tokens = true;
                 authorization_should_be_done_from_scratch = true;
@@ -24,6 +28,10 @@ export async function authorize() { // backgroundで呼び出し
             }
         }
     }
+}
+
+export function checkIfAuthorized() {
+    return vault.get('authorized') == 'true';
 }
 
 export async function putAuthURL() { // backgroundで呼び出し
