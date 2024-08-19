@@ -44,8 +44,10 @@ class Vault {
         // キャッシュの値が異なったKeyのアップデートリスナーを呼ぶ。また、監視中のキーを初めてキャッシュできた場合もアップデートリスナーを呼ぶ。
         this.checkIfUpToDate();
         if (!this.isUpToDate) {
+            console.log('catching up...');
             let promise_buf = [];
             for (let key of this.observedKeys) {
+                console.log('checking key: '+key);
                 let fetchedValue = storage.getItem(key);
                 if ( 
                     fetchedValue !== null 

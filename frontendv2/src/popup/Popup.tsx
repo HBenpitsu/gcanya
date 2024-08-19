@@ -1,5 +1,6 @@
 import { useContext, useRef } from "react";
 import { actionHandlerContext,contentContext } from "./PopupModel";
+import { AuthChip } from '../component/authorizer';
 
 const Popup = () => {
   const content = useContext(contentContext);
@@ -21,6 +22,10 @@ const Popup = () => {
     <input value={content.textInput} onChange={actionHandler.onInputChanged} type="text" />
     <div>
       {JSON.stringify(content)}
+    </div>
+    <div>
+      認証チップ
+      <AuthChip />
     </div>
   </>
 };

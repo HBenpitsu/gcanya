@@ -10,19 +10,19 @@ describe("signal",()=>{
     it("shoud be transceived",async ()=>{
         let senderRecognizedStateChange = 0;
         const outer = {state: SignalState.INNACTIVE};
-        signalTerminal.addSignalStateListener(Signal.AuthURLShown,(state)=>{
+        signalTerminal.addSignalStateUpdateListener(Signal.showAuthURL, async (state)=>{
             outer.state = state;
             senderRecognizedStateChange++;
         })
         let signalReceived = 0;
-        signalHandler.setSignalHandler(Signal.AuthURLShown,async ()=>{
+        signalHandler.setSignalHandler(Signal.showAuthURL,async ()=>{
             await new Promise((resolve)=>setTimeout(resolve,vaultCatchUpInterval*3));
             signalReceived++;
         })
 
         expect(outer.state).toBe(SignalState.INNACTIVE);
 
-        signalTerminal.send(Signal.AuthURLShown);
+        signalTerminal.send(Signal.showAuthURL);
 
         await new Promise((resolve)=>setTimeout(resolve,vaultCatchUpInterval*2));
         expect(outer.state).toBe(SignalState.PROCESSING);
@@ -34,7 +34,7 @@ describe("signal",()=>{
         expect(signalReceived).toBeGreaterThanOrEqual(1);
 
 
-        signalTerminal.send(Signal.AuthURLShown);
+        signalTerminal.send(Signal.showAuthURL);
 
         await new Promise((resolve)=>setTimeout(resolve,vaultCatchUpInterval*2));
         expect(outer.state).toBe(SignalState.PROCESSING);

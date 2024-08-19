@@ -9,7 +9,7 @@ export enum SignalState{
 }
 
 export enum Signal{
-    AuthURLShown = 'signal/AuthURLToBeShown',
+    showAuthURL = 'signal/showAuthURL',
     OAuth = 'signal/OAuth',
     Register = 'signal/Register',
 }
@@ -20,6 +20,7 @@ class Handler{
     setSignalHandler(signal: Signal, callback: () => Promise<void>){
         if (this.handledSignals.includes(signal)){throw new Error('signal '+signal+' handler was added multiple times.');}
         vault.addUpdateListener(signal, async (state) => {
+            console.log('signalHandlerCalled');
             if (!this.processing && state === SignalState.UNPROCESSED){
                 this.processing = true;
                 await allowBlocking(); 
@@ -38,7 +39,9 @@ export const signalHandler = new Handler();
 
 class Terminal{
     constructor(){
-        vault.setDefault(Signal.AuthURLShown, SignalState.INNACTIVE);
+        vault.setDefault(Signal.showAuthURL, SignalState.INNACTIVE);
+        vault.setDefault(Signal.OAuth, SignalState.INNACTIVE);
+        vault.setDefault(Signal.Register, SignalState.INNACTIVE);
     }
     async send(signal: Signal){
         if (
@@ -47,13 +50,17 @@ class Terminal{
         ){return;}
         await vault.set(signal, SignalState.UNPROCESSED);
     }
-    addSignalStateListener(signal: Signal, callback: (state: SignalState) => void){
+    addSignalStateUpdateListener(signal: Signal, callback: (state: SignalState) => Promise<void>){
         vault.addUpdateListener(signal, async (state) => {
+            console.log('signalListenerCalled');
             await callback(state as SignalState);
         });
     }
     observe(signal: Signal){
         return vault.get(signal) as SignalState;
+    }
+    cancel(signal: Signal){
+        vault.set(signal, SignalState.INNACTIVE);
     }
     async wait(signal: Signal, interval_ms: number=10){
         while (vault.get(signal) !== SignalState.PROCESSED){

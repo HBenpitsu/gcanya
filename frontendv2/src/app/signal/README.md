@@ -10,3 +10,11 @@ signalの受信はcallback関数を取る`listen_to_signals`か、特定のSigna
 また使用上taskを積み上げるqueueのような使い方はできない。すなわち、`PROCESSING`状態で送信されたSignalは無視される。queueが必要な場合は別に実装すること。
 
 signalの変更に伴ってコンポーネントを再レンダリングしたい場合は`useSignal`を用いる．
+
+==設計について==
+
+Terminal,Handlerというクラスを用意しているが，
+Signalをenumではなく，classとして，Terminal, Handlerの機能を統合させるべきだった．
+現在enum Signalが果たしている実際のSignalの定義はインスタンスの作成によって行われるべきである．
+
+（要改修）
