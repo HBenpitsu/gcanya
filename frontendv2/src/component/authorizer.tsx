@@ -29,10 +29,8 @@ export const AuthChip = () => {
     
     useEffect(() => {//初回のみ実行する．
         signalTerminal.cancel(Signal.OAuth);
-        console.log("signalStateUpdateListner is added;")
         signalTerminal.addSignalStateUpdateListener(Signal.OAuth, async (state) => {
             setOAuthState(state);
-            console.log("OAuthState: ", state);
             if (state == SignalState.UNPROCESSED || state == SignalState.PROCESSING){
                 setAuthURLisSet(false);
             }
@@ -46,14 +44,11 @@ export const AuthChip = () => {
         case SignalState.UNPROCESSED:
         case SignalState.PROCESSING:
             if (authURLisSet){
-                console.log("authURLisSet");
                 return <ActiveChip href={new URL(authURL!)} />;
             } else {
-                console.log("authURLis not Set");
                 return <PendingChip />;
             }
         default:
-            console.log("innactive");
             return <InactiveChip />;
 
     }

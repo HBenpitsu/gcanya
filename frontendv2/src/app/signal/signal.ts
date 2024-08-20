@@ -20,7 +20,6 @@ class Handler{
     setSignalHandler(signal: Signal, callback: () => Promise<void>){
         if (this.handledSignals.includes(signal)){throw new Error('signal '+signal+' handler was added multiple times.');}
         vault.addUpdateListener(signal, async (state) => {
-            console.log('signalHandlerCalled');
             if (!this.processing && state === SignalState.UNPROCESSED){
                 this.processing = true;
                 await allowBlocking(); 
@@ -52,7 +51,6 @@ class Terminal{
     }
     addSignalStateUpdateListener(signal: Signal, callback: (state: SignalState) => Promise<void>){
         vault.addUpdateListener(signal, async (state) => {
-            console.log('signalListenerCalled');
             await callback(state as SignalState);
         });
     }
