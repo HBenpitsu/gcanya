@@ -1,7 +1,6 @@
 import browser from 'webextension-polyfill';
-import { Signal, signalHandler } from '../app/signal';
+import { OAuthSig } from '../app/signalv2';
 import { authorize } from '../app/assignmentRegisterer/authorizer';
-import { sleep } from '../utils';
 
 // show welcome page on new install
 browser.runtime.onInstalled.addListener(async (details) => {
@@ -12,7 +11,7 @@ browser.runtime.onInstalled.addListener(async (details) => {
   }
 });
 
-signalHandler.setSignalHandler(Signal.OAuth, async () => {
+OAuthSig.setSignalHandler(async () => {
   await authorize();  
 });
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAuthURL } from "../app/assignmentRegisterer/authorizer";
-import { signalTerminal,Signal, signalHandler, SignalState } from "../app/signal";
+import { OAuthSig, showAuthURLSig, SignalState } from "../app/signalv2";
 
 type ActiveChipProps = {
     href: URL;
@@ -18,24 +18,23 @@ const PendingChip = () => {
 
 const InactiveChip = () => {
     return <button onClick={()=>{
-        signalTerminal.send(Signal.OAuth);
+        OAuthSig.send();
     }}>認証非アクティブ (クリックしてアクティベート) </button>;
 };
 
 export const AuthChip = () => {
-    let [OAuthState, setOAuthState] = useState<SignalState>(signalTerminal.observe(Signal.OAuth));
+    let [OAuthState, setOAuthState] = useState<SignalState>(OAuthSig.observe());
     let [authURL, setAuthURL] = useState<string|null>(getAuthURL());
     let [authURLisSet, setAuthURLisSet] = useState(true);
     
     useEffect(() => {//初回のみ実行する．
-        signalTerminal.cancel(Signal.OAuth);
-        signalTerminal.addSignalStateUpdateListener(Signal.OAuth, async (state) => {
+        OAuthSig.addSignalChangedListener(async (state) => {
             setOAuthState(state);
             if (state == SignalState.UNPROCESSED || state == SignalState.PROCESSING){
                 setAuthURLisSet(false);
             }
         });
-        signalHandler.setSignalHandler(Signal.showAuthURL, async ()=> {
+        showAuthURLSig.setSignalHandler(async ()=> {
             setAuthURL(await getAuthURL());
             setAuthURLisSet(true);
         });

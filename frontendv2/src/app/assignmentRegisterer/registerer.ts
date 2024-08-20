@@ -1,5 +1,5 @@
-import { AssignmentRecord, AssignmentRecordVault } from "../assignmentRecord";
-import { signalTerminal, Signal } from "../signal";
+import { AssignmentRecordVault } from "../assignmentRecord";
+import { OAuthSig } from "../signalv2";
 import { endpoint } from "./endpoint";
 
 export async function register() { // backgroundで呼び出し
@@ -12,14 +12,14 @@ export async function register() { // backgroundで呼び出し
         if (responce.detail == "Unauthorized"){
             let res = await endpoint.refreshTokens();
             if (res.detail == "Unauthorized"){
-                signalTerminal.send(Signal.OAuth);
+                OAuthSig.send();
             }
             failed = true;
         }
     }
 
     if (failed){
-        await signalTerminal.wait(Signal.OAuth);
+        await OAuthSig.wait();
     } else {
         return;
     }

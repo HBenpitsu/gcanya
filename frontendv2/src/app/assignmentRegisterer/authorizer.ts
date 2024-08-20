@@ -1,4 +1,4 @@
-import { Signal, signalTerminal } from "../signal";
+import { showAuthURLSig, OAuthSig } from "../signalv2";
 import { endpoint } from "./endpoint";
 import { vault } from "../vault";
 import { sleep } from "../../utils";
@@ -10,8 +10,8 @@ export async function authorize() { // backgroundで呼び出し
     for(let cc = 0;cc < 3;cc++) {
 
         putAuthURL();
-        signalTerminal.send(Signal.showAuthURL);
-        await signalTerminal.wait(Signal.showAuthURL);
+        showAuthURLSig.send();
+        await showAuthURLSig.wait();
 
         for (let c = 0;c < 10;c++) {
             let ret = await endpoint.getTokens();
