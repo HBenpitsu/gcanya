@@ -1,12 +1,12 @@
-import { showAuthURLSig, OAuthSig } from "../signalv2";
+import { showAuthURLSig } from "../signalv2";
 import { endpoint } from "./endpoint";
 import { vault } from "../vault";
 import { sleep } from "../../utils";
+import { authorizedFlag } from "../flag";
 
-vault.setDefault('authorized', 'false');
-
+// OAuthSigのhandler
 export async function authorize() { // backgroundで呼び出し
-    vault.set('authorized', 'false');
+    authorizedFlag.turnOff();
     for(let cc = 0;cc < 3;cc++) {
 
         putAuthURL();
@@ -16,7 +16,7 @@ export async function authorize() { // backgroundで呼び出し
         for (let c = 0;c < 10;c++) {
             let ret = await endpoint.getTokens();
             if (ret.detail == "success") {
-                vault.set('authorized', 'true');
+                authorizedFlag.turnOn();
                 return;
             } else if (ret.detail == "Unauthorized") {
                 break;
@@ -33,7 +33,7 @@ export async function putAuthURL() { // backgroundで呼び出し
     vault.set('auth_url', ret.auth_url);
 }
 
+vault.setDefault('auth_url', '');
 export function getAuthURL() { // foregroundで呼び出し
-    vault.setDefault('auth_url', '');
     return vault.get('auth_url') || null;
 }

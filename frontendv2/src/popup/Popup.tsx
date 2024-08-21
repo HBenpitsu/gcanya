@@ -1,31 +1,17 @@
-import { useContext, useRef } from "react";
-import { actionHandlerContext,contentContext } from "./PopupModel";
-import { AuthChip } from '../component/authorizer';
+
+import { AuthChip, AuthFlagChip } from '../component/authorization';
+import { AssignmentList } from "../component/assignmentList";
+import { registerAllPendingAssignments } from '../app/assignmentRegisterer/registerer';
 
 const Popup = () => {
-  const content = useContext(contentContext);
-  const actionHandler = useContext(actionHandlerContext);
-
   return <>
-    <button onClick={actionHandler.onAllAssignmentsButtonClicked}>
-      課題全部
-    </button>
-    <button onClick={actionHandler.onFavoriteCoursesButtonClicked}>
-      お気に入り
-    </button>
-    <button onClick={actionHandler.onAllCoursesButtonClicked}>
-      全コース
-    </button>
-    <button onClick={actionHandler.onCourseDetailButtonClicked}>
-      コース詳細
-    </button>
-    <input value={content.textInput} onChange={actionHandler.onInputChanged} type="text" />
     <div>
-      {JSON.stringify(content)}
-    </div>
-    <div>
-      認証チップ
+      <AssignmentList />
       <AuthChip />
+      <AuthFlagChip />
+      <button onClick={()=>{
+        registerAllPendingAssignments();
+      }}>未登録の課題を登録</button>
     </div>
   </>
 };

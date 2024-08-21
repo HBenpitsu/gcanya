@@ -1,29 +1,54 @@
-import { AssignmentRecordVault } from "../assignmentRecord";
-import { OAuthSig } from "../signalv2";
+import { Temporal } from "temporal-polyfill";
+import { allRecordsVault, AssignmentRecord, registerationQueue } from "../assignmentRecord";
+import { authorizedFlag } from "../flag";
+import { OAuthSig, registerSig } from "../signalv2";
 import { endpoint } from "./endpoint";
 
 export async function register() { // backgroundで呼び出し
-    while (true) {
-    
-    let records = new AssignmentRecordVault('registeration_queue');
-    let failed = false;
-    for (let record of records.all()){
-        let responce = await endpoint.register(record);
-        if (responce.detail == "Unauthorized"){
-            let res = await endpoint.refreshTokens();
-            if (res.detail == "Unauthorized"){
-                OAuthSig.send();
+    let tokenRefreshFailed = false;
+    while (registerationQueue.all().length > 0) {
+        
+        let succeededRecords: string[] = [];
+
+        for (let record of registerationQueue.all()) {
+            if (record.dueDate.toInstant().epochSeconds < Temporal.Now.instant().epochSeconds) { 
+                succeededRecords.push(record.id);
+            } else {
+                let ret = await endpoint.register(record);
+                if (ret.detail == "success") {
+                    authorizedFlag.turnOn();
+                    succeededRecords.push(record.id);
+                } else {
+                    let ret = await endpoint.refreshTokens();
+                    if (ret.detail !== "success") { tokenRefreshFailed = true; }
+                    break;
+                }
             }
-            failed = true;
         }
+
+        registerationQueue.drop( rec=> succeededRecords.includes(rec.id));
+        for (let record of allRecordsVault.filter( rec=> succeededRecords.includes(rec.id))){
+            record.markAsRegistered();
+        }
+
+        if (tokenRefreshFailed) {break;}    
     }
 
-    if (failed){
-        await OAuthSig.wait();
-    } else {
-        return;
-    }
-
+    if (tokenRefreshFailed) {
+        authorizedFlag.turnOff();
+        OAuthSig.send();
     }
 }
 
+export async function registerOneRecord(record: AssignmentRecord) { // forgegroundで呼び出し
+    registerationQueue.push(record);
+    registerSig.send();
+}
+
+export async function registerAllPendingAssignments() { // forgegroundで呼び出し
+    let pendingRecords = allRecordsVault.filter( rec => rec.isPending());
+    for (let record of pendingRecords) {
+        registerationQueue.push(record);
+    }
+    registerSig.send();
+}

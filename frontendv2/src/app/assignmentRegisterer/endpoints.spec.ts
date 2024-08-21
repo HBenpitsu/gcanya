@@ -1,4 +1,3 @@
-import { AssignmentRecord, AssignmentRecordVault } from "../assignmentRecord";
 import { endpoint } from "./endpoint";
 
 describe('endpoints', () => {

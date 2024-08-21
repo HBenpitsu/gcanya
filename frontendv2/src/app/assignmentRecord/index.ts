@@ -1,2 +1,5 @@
 export { AssignmentRecord } from './assignmentRecord';
-export { AssignmentRecordVault } from './assignmentRecordVault';
+
+import { AssignmentRecordVault } from './assignmentRecordVault';
+export const registerationQueue = new AssignmentRecordVault('registerationQueue');
+export const allRecordsVault = new AssignmentRecordVault('allRecordsVault');

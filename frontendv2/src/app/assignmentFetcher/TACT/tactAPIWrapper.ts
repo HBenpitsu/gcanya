@@ -50,7 +50,7 @@ class TACTAPIExploiter {
         description: assignment.instructions,
         course_id: course.id,
         course_name: course.title,
-        dueDate: Temporal.ZonedDateTime.from(assignment.dropDeadTimeString),
+        dueDate: Temporal.Instant.from(assignment.dueTimeString).toZonedDateTimeISO('Asia/Tokyo'),
       };
     }); //コルーチンのリスト
     return await Promise.all(assignments); //オブジェクトのリストに

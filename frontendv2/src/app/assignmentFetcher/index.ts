@@ -1,1 +1,1 @@
-export {};
+export { updateAllRecordsVault } from './updateAllRecordsVault';

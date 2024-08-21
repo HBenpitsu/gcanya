@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAuthURL } from "../app/assignmentRegisterer/authorizer";
 import { OAuthSig, showAuthURLSig, SignalState } from "../app/signalv2";
+import { authorizedFlag as authFlag } from "../app/flag";
 
 type ActiveChipProps = {
     href: URL;
@@ -8,7 +9,7 @@ type ActiveChipProps = {
 
 const ActiveChip = ({href}: ActiveChipProps) => {
     return <button onClick={()=>{
-        window.open(href.toString(), "_blank");
+        window.open(href.toString(), 'blank', '');
     }}>認証待ち (クリックして認証)</button>;
 };
 
@@ -52,3 +53,19 @@ export const AuthChip = () => {
 
     }
 };
+
+export const AuthFlagChip = () => {
+    let [authFlagState, setAuthFlagState] = useState<boolean>(authFlag.isOn());
+    
+    useEffect(() => {//初回のみ実行
+        authFlag.addFlagChangedListener(async (flag) => {
+            setAuthFlagState(flag);
+        });
+    }, []);
+
+    if (authFlagState) {
+        return <>認証済み</>
+    } else {
+        return <>未認証</>
+    }
+}
