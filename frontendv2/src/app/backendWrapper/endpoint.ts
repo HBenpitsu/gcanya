@@ -1,6 +1,9 @@
 import { AssignmentRecord } from "../assignmentRecord";
 
-const BACKEND_URL = "http://localhost:8080";
+let BACKEND_URL: string;
+
+// BACKEND_URL = "http://localhost:8080";
+BACKEND_URL = "https://jack.hbenpitsu.net";
 
 export namespace endpoint{
 
