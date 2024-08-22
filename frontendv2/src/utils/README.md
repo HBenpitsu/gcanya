@@ -1,21 +1,20 @@
 [戻る](../README.md)
 
-# ディレクトリ
+# utils \<temp\>
 
-## utils \<temp\>
+## format.ts
 
-### format.ts
+*現状不要
+値を整形する単一かつ汎用的な関数を定義する。
 
-値を整形する単一の関数を定義する。
-
-### types.ts
+## types.ts
 
 型を定義する。
 
-### values.ts
+## values.ts
 
 定数を定義する。
 
-### index.ts \<temp\>
+## index.ts \<temp\>
 
 values, types, formatをまとめてexportする。

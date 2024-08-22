@@ -1,7 +1,6 @@
 
-import { AuthChip, AuthFlagChip } from '../component/authorization';
-import { AssignmentList } from "../component/assignmentList";
-import { registerAllPendingAssignments } from '../app/assignmentRegisterer/registerer';
+import { AssignmentList, AuthChip, AuthFlagChip } from "../component";
+import { foreground as registerer } from '../app/backendWrapper/registerer';
 
 const Popup = () => {
   return <>
@@ -10,7 +9,7 @@ const Popup = () => {
       <AuthChip />
       <AuthFlagChip />
       <button onClick={()=>{
-        registerAllPendingAssignments();
+        registerer.registerAllPendingAssignments();
       }}>未登録の課題を登録</button>
     </div>
   </>

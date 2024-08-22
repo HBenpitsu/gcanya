@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { allRecordsVault, AssignmentRecord } from "../app/assignmentRecord";
-import { registerOneRecord } from '../app/assignmentRegisterer/registerer';
+import { foreground as registerer } from '../app/backendWrapper/registerer';
 import parse from 'html-react-parser';
 import { AssignmentStatus } from "../app/assignmentRecord/assignmentRecord";
 import { Temporal } from "temporal-polyfill";
@@ -11,8 +11,12 @@ type AssignmentEntryProps = {
 }
 
 const AssignmentDurationSetter = ({record}:AssignmentEntryProps)=>{
+    // このコンポーネントは複数個レンダリングされるため，一意なidが必要．
     const iptIdString = `durationSetter,${record.id}`;
+    // inputタグのvalue属性をstateで管理する．...さもなくば値を変更することができない．
+    // (再レンダリング時に元に戻ってしまうためである．) 
     let [durationState, setDurationState] = useState(record.duration.toString());
+
     return <div>
         <input type="text" value={durationState} id={iptIdString} onChange={
             e=>{setDurationState(e.target.value);}
@@ -54,7 +58,7 @@ const AssignmentEntry = ({record}:AssignmentEntryProps)=>{
         <h1>{record.title}({record.id})</h1>
         <p>{parse(record.description)}</p>
         <p>{record.course_name}({record.course_id})</p>
-        <button onClick={()=>{registerOneRecord(record);}}>課題を登録</button>
+        <button onClick={()=>{registerer.registerOneRecord(record);}}>課題を登録</button>
         <RecordStateDisplay record={record}/>
         <RecordStateSetter record={record}/>
         <AssignmentDurationSetter record={record}/>

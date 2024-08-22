@@ -1,7 +1,6 @@
 import { Temporal } from 'temporal-polyfill';
 import { AssignmentRecord } from './assignmentRecord';
 import { AssignmentRecordVault } from './assignmentRecordVault';
-import { sleep } from '../../utils';
 
 describe(
     'assignmentRecord', ()=>{

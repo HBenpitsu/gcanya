@@ -1,29 +1,29 @@
 [戻る](../README.md)
 
-# ディレクトリ
+*未完成
 
-## content \<temp\>
+# content \<temp\>
 
 LMSごとにサイト内容 (DOM) の改変プロセスのエントリーポイントを定める。
 
-### SHARED
+## SHARED
 
 LMSに独立に記述できるUIを記述する。
 なるべく多くをSHAREDに記述し、後述のエントリーポイントへの記述をなるべく減らすこと。
 
-#### SHARED/Content.tsx \<temp\>
+### SHARED/Content.tsx \<temp\>
 
 UIを記述する。アプリケーションロジックとのやり取りはContentModel (ViewModel) を介して行う。
 
-#### SHARED/Content.spec.tsx \<temp\>
+### SHARED/Content.spec.tsx \<temp\>
 
 結合テスト
 
-#### SHARED/twind.ts \<temp\>
+### SHARED/twind.ts \<temp\>
 
 tailwindを再現したモジュールを初期化する。
 
-### 各LMS名を冠したファイル \<entry\>
+## 各LMS名を冠したファイル \<entry\>
 
 - NuTACT.tsx
 - NuMoodle.tsx

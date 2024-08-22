@@ -10,6 +10,7 @@ export enum AssignmentStatus {
     Pending = 0
 }
 
+// デフォルト値を設定するので，すべてoptionalである．
 export type AssignmentRecordStruct = {
     id?: string;
     title?: string;
@@ -34,6 +35,7 @@ export class AssignmentRecord{
     }
 
     static parseObj(assignmentRecordVault: AssignmentRecordVault, obj: AssignmentRecordStruct){
+        // default値の設定
         let id = obj.id??uuidv4();
         let title = obj.title??"";
         let description = obj.description??"";
@@ -43,6 +45,7 @@ export class AssignmentRecord{
         let duration = obj.duration??settingVault.defaultAssignmentDuration;
         let status = obj.status??AssignmentStatus.Pending;
         
+        // recordの合成
         let _record = new Record(assignmentRecordVault.recordVault, [id,title,description,dueDate,course_name,course_id,duration,status]);
 
         return new AssignmentRecord(_record);
@@ -103,6 +106,7 @@ export class AssignmentRecord{
         return this._record.get('status') === AssignmentStatus.Pending;
     }
 
+    //object(key-value)として出力されるのではなく，値の配列(valueのみ)として出力される．
     unwrap(){
         return this._record.unwrap();
     }
